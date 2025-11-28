@@ -4,10 +4,10 @@ If You want to install n8n at short time;
 
 <mark>"Develop locally, publish globally"</mark>
 
-Benefits
-: No authorization is required
-: No credentials are required.
-: No quotas
+**Benefits**
+- No authorization is required
+- No credentials are required.
+- No quotas
 
 #### Full stack Proxy Nginx n8n:
 <p align="left">
