@@ -1,9 +1,9 @@
 services:
 
     n8n:
-        depends_on:
-            certbot:
-                condition: service_healthy
+#        depends_on:
+#            certbot:
+#                condition: service_healthy
         image: 'n8nio/n8n:${N8N_IMAGE_VERSION}'
         container_name: n8n
         networks:

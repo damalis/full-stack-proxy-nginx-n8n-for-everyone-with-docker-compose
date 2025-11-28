@@ -425,7 +425,7 @@ then
 	cd ..
 	echo "Ok."
 else
-	ssl_snippet="certbot certonly --webroot --webroot-path \/tmp\/acme-challenge --rsa-key-size 4096 --non-interactive --agree-tos --no-eff-email --force-renewal --email \$\{LETSENCRYPT_EMAIL\} -d \$\{DOMAIN_NAME\} -d www.\$\{DOMAIN_NAME\} -d mail.\$\{DOMAIN_NAME\} -d \$\{N8N_SUBDOMAIN\}.\$\{DOMAIN_NAME\} -d \$\{WEBUI_ SUBDOMAIN\}.\$\{DOMAIN_NAME\}"
+	ssl_snippet="certbot certonly --webroot --webroot-path \/tmp\/acme-challenge --rsa-key-size 4096 --non-interactive --agree-tos --no-eff-email --force-renewal --email \$\{LETSENCRYPT_EMAIL\} -d \$\{DOMAIN_NAME\} -d www.\$\{DOMAIN_NAME\} -d mail.\$\{DOMAIN_NAME\} -d $n8n_subdomain.\$\{DOMAIN_NAME\} -d $webui_subdomain.\$\{DOMAIN_NAME\}"
 fi
 
 # set parameters in env.example file
