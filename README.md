@@ -4,7 +4,7 @@ If You want to install n8n at short time;
 
 <mark>"Develop locally, publish globally"</mark>
 
-**Benefits**
+#### Benefits
 - No authorization is required
 - No credentials are required.
 - No quotas
