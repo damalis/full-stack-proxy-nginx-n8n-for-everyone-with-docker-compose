@@ -2,15 +2,21 @@
 
 If You want to install n8n at short time;
 
+=="Develop locally, publish globally"==
+
 #### Full stack Proxy Nginx n8n:
 <p align="left">
 <a href="https://n8n.io/" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/45487711?s=200&v=4" alt="n8n" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
+<a href="https://ollama.com/" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/151674099?s=200&v=4" alt="ollama" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
+<a href="https://github.com/mailhog" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/10258541?s=200&v=4" alt="mailhog" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
+<a href="https://www.postgresql.org/" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/177543?s=200&v=4" alt="postgresql" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
+<a href="https://github.com/pgvector" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/98363230?s=200&v=4" alt="pgvector" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
+<a href="https://www.pgadmin.org/" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/113517144?s=200&v=4" alt="pgadmin" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
 <a href="https://www.docker.com/" target="_blank" rel="noreferrer" style="text-decoration: none;"> <img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/docker/docker.png" alt="docker" width="40" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
 <a href="https://www.nginx.com" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/1412239?s=200&v=4" alt="nginx" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
 <a href="https://en.wikipedia.org/wiki/Bash_(Unix_shell)" target="_blank" rel="noreferrer" style="text-decoration: none;"> <img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/bash/bash.png" alt="Bash" height="50" width="50" style="max-width: 100%;"> </a>&nbsp;&nbsp;&nbsp; 
 <a href="https://letsencrypt.org/" target="_blank" rel="noreferrer" style="text-decoration: none;"> <img src="https://avatars.githubusercontent.com/u/9289019?s=200&v=4" alt="letsencrypt" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
 <a href="https://certbot.eff.org/" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/17889013?s=200&v=4" alt="certbot" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
-<a href="https://www.offen.dev/" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/47735043?s=200&v=4" alt="backup" height="35" width="35"/> </a>
 </p>
 
 Plus, manage docker containers with Portainer.
@@ -36,12 +42,27 @@ Plus, manage docker containers with Portainer.
 
 ##### Note: Fedora 37, 39 and alpine linux x86-64 compatible, could not try sles IBM Z s390x, rhel IBM Z s390x and raspberrypi.
 
+##### System Requirements
+
+- Operating System: Current 64-bit Linux operating system.
+- Processor: 8-core 64-bit processor (Intel i5/AMD Ryzen 3 or better recommended).
+- RAM: Minimum 16GB (32GB recommended for larger models).
+- Storage: At least 20GB free disk space (models like Llama 3.2 require significant space).
+- GPU (Optional): NVIDIA GPU with 4GB+ VRAM for hardware acceleration (CUDA support required).
+
+																																																												  
 #### With this project you can quickly run the following:
 
 - [n8n](https://hub.docker.com/r/n8nio/n8n)
+- [Ollama](https://hub.docker.com/r/ollama/ollama)
+- [mailhog](https://github.com/mailhog)
+- [postgreSQL](https://hub.docker.com/_/postgres)
+- [pgvector](https://hub.docker.com/r/pgvector/pgvector)
+- [pgAdmin](https://hub.docker.com/r/dpage/pgadmin4)
+- [Ollama](https://hub.docker.com/r/ollama/ollama)
+- [Open WEBUI](https://github.com/open-webui/open-webui)
 - [proxy (nginx)](https://hub.docker.com/_/nginx)
 - [certbot (letsencrypt)](https://hub.docker.com/r/certbot/certbot)
-- [backup](https://hub.docker.com/r/offen/docker-volume-backup)
 
 #### For certbot (letsencrypt) certificate:
 
@@ -52,6 +73,7 @@ Create rules to open ports to the internet, or to a specific IPv4 address or ran
 
 - http: 80
 - https: 443
+- pgadmin: 9090
 - portainer: 9001
 
 #### Contents:
@@ -62,8 +84,15 @@ Create rules to open ports to the internet, or to a specific IPv4 address or ran
 	- [Configuration](#configuration)
 	- [Installation](#installation)
 - [Usage](#usage)
+    - [n8n](#n8n)
+	- [Ollama](#ollama)
+    - [Mail](#mail)
+	- [Database](#database)
+	- [Pgvector](#pgvector)
+	- [pgAdmin](#pgadmin)
+	- [Ollama](#ollama)
+	- [Open WEBUI](#open-webui)
 	- [Proxy](#proxy)
-    - [backup](#backup)
 
 ### Automatic
 
@@ -97,7 +126,7 @@ Clone this repository or copy the files from this repository into a new folder.
 Make sure to [add your user to the `docker` group](https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user).
 
 #### Configuration
-
+				 
 download with
 ```
 git clone https://github.com/damalis/full-stack-proxy-nginx-n8n-for-everyone-with-docker-compose.git
@@ -117,7 +146,8 @@ cp env.example .env
 
 Edit the `.env` file to change values of
 
-|```LOCAL_TIMEZONE```|```DOMAIN_NAME```|```SUBDOMAIN```|```DIRECTORY_PATH```|```LETSENCRYPT_EMAIL```|```SSL_SNIPPET```|
+|```LOCAL_TIMEZONE```|```DOMAIN_NAME```|```N8N_SUBDOMAIN```|```WEBUI_SUBDOMAIN```|```DIRECTORY_PATH```|```LETSENCRYPT_EMAIL```|
+|```DB_USER```|```DB_PASSWORD```|```DB_NAME```|```PGA_CONTROLPASS```|```SSL_SNIPPET```|
 
 <table><thead>
   <tr>
@@ -140,7 +170,7 @@ Edit the `.env` file to change values of
   </tr>
   <tr>
     <td>remotehost</td>
-    <td><code>certbot certonly --webroot --webroot-path /tmp/acme-challenge --rsa-key-size 4096 --non-interactive --agree-tos --no-eff-email --force-renewal --email ${LETSENCRYPT_EMAIL} -d ${DOMAIN_NAME} -d www.${DOMAIN_NAME} -d ${SUBDOMAIN}.${DOMAIN_NAME}</code></td>
+    <td><code>certbot certonly --webroot --webroot-path /tmp/acme-challenge --rsa-key-size 4096 --non-interactive --agree-tos --no-eff-email --force-renewal --email ${LETSENCRYPT_EMAIL} -d ${DOMAIN_NAME} -d www.${DOMAIN_NAME}</code></td>
   </tr>
 </tbody>
 </table>
@@ -249,6 +279,44 @@ docker compose up -d	# Starts services in detached mode (in the background)
 
 [n8n](https://docs.n8n.io/hosting/) This page provides guidance on setting up n8n for both the Enterprise and Community self-hosted editions. The Community edition is free, the Enterprise edition isn't..
 
+#### Ollama
+
+Base url; |```Host: http://ollama:11434;```|
+
+#### Mail
+
+SMTP settings; ```Host: mail; Port: 1025;```
+
+The authorize screen, |```username: ${DB_USER}```| and |```password: ${DB_PASSWORD}```| in the `.env` file.
+
+#### Database
+
+; |```Host: database; Port: 5432;```|
+
+The authorize screen, |```username: ${DB_USER}```|, |```password: ${DB_PASSWORD}```| and |```database name: ${DB_NAME}```| in the `.env` file.
+
+#### pgvector
+
+; |```Host: pgvector; Port: 15432;```|
+
+The authorize screen, |```username: ${DB_USER}```, ```password: ${DB_PASSWORD}``` and ```database name: ${DB_NAME}```| in the `.env` file.
+
+#### pgAdmin
+
+You can also visit `https://example.com:9090`.
+
+The login screen, |```username: ${LETSENCRYPT_EMAIL}``` and ```password: ${PGA_CONTROLPASS}```| in the `.env` file.
+
+#### Ollama
+
+The login screen, |```username: http://ollama:11434```|.
+
+#### Open WEBUI
+
+You can also visit `https://${WEBUI_SUBDOMAIN}.example.com`.
+
+[Environment Variable Configuration](https://docs.openwebui.com/getting-started/env-configuration)
+
 #### Proxy
 
 Proxying is typically used to distribute the load among several servers, seamlessly show content from different websites, or pass requests for processing to application servers over protocols other than HTTP.
@@ -256,11 +324,3 @@ Proxying is typically used to distribute the load among several servers, seamles
 add or remove code in the ```./proxy/templates/proxy.conf.template``` file for custom proxy configurations
 
 [https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/)
-
-#### backup
-
-This will back up the all files and folders in database/dump sql and html volumes, once per day, and write it to ```./backups``` with a filename like backup-2023-01-01T10-18-00.tar.gz
-
-##### can run on a custom cron schedule
-
-```BACKUP_CRON_EXPRESSION: '20 01 * * *'``` the UTC timezone.

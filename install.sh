@@ -56,10 +56,10 @@ fi
 ##########
 echo ""
 echo ""
-echo "======================================================================="
+echo "=========================================================================="
 echo "| Older versions of Docker were called docker, docker.io, or docker-engine."
 echo "| If these are installed or all conflicting packages, uninstall them."
-echo "======================================================================="
+echo "=========================================================================="
 echo ""
 sleep 2
 
@@ -171,6 +171,10 @@ then
 	sudo apt update
 	sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
+	# sudo uname -r
+	# sudo apt-get dist-upgrade -y
+	# sudo reboot
+
 	#Installed=`sudo apt-cache policy docker-ce | sed -n '2p' | cut -c 14-`
 	#Candidate=`sudo apt-cache policy docker-ce | sed -n '3p' | cut -c 14-`
 elif [ "$lpms" == "pacman" ]
@@ -203,6 +207,12 @@ then
 	sudo systemctl enable containerd.service
 	sudo systemctl start docker
 fi
+
+##########
+# pgAdmin runs as the pgadmin user (UID: 5050) in the pgadmin group (GID: 5050) in the container.
+# You must ensure that all files are readable, and where necessary (e.g. the working/session directory) writeable for this user on the host machine.
+##########
+sudo chown -R 5050:5050 ./pgadmin
 
 echo ""
 echo "Done ✓"
@@ -300,6 +310,7 @@ then
 	: ${domain_name:=localhost}
 	[ "$domain_name" != "localhost" ] && sudo -- sh -c -e "grep -qxF '127.0.1.1  $domain_name' /etc/hosts || echo '127.0.1.1  $domain_name' >> /etc/hosts"
 	ping -c 1 $domain_name 2>&1 > /dev/null
+	sudo -- sh -c -e "grep -qxF '127.0.1.1  mail.$domain_name' /etc/hosts || echo '127.0.1.1  mail.$domain_name' >> /etc/hosts"
 else
 	domain_name=""
 	read -p 'Enter Domain Name(e.g. : example.com): ' domain_name
@@ -319,6 +330,7 @@ do
 		: ${domain_name:=localhost}
 		[ "$domain_name" != "localhost" ] && sudo -- sh -c -e "grep -qxF '127.0.1.1  $domain_name' /etc/hosts || echo '127.0.1.1  $domain_name' >> /etc/hosts"
 		ping -c 1 $domain_name 2>&1 > /dev/null
+		sudo -- sh -c -e "grep -qxF '127.0.1.1  mail.$domain_name' /etc/hosts || echo '127.0.1.1  mail.$domain_name' >> /etc/hosts"	
 	else
 		read -p 'Enter Domain Name(e.g. : example.com): ' domain_name
 		#[ "$domain_name" != "localhost" ] && sudo -- sh -c -e "sed -i '/$domain_name/d' /etc/hosts"
@@ -330,27 +342,51 @@ do
 done
 echo "Ok."
 
-subdomain=""
+n8n_subdomain=""
 regex="^[a-z0-9-]+(\.[a-z0-9-]+)*$"
-read -p 'Enter Subdomain (default : n8n): ' subdomain
-: ${subdomain:=n8n}
+read -p 'Enter n8n Interface Subdomain (default : n8n): ' n8n_subdomain
+: ${n8n_subdomain:=n8n}
 if [ "$which_h" == "localhost" ]
 then
-        sudo -- sh -c -e "grep -qxF '127.0.1.1  '$subdomain'.'$domain_name /etc/hosts || echo '127.0.1.1  '$subdomain'.'$domain_name >> /etc/hosts"
+	sudo -- sh -c -e "grep -qxF '127.0.1.1  '$n8n_subdomain'.'$domain_name /etc/hosts || echo '127.0.1.1  '$n8n_subdomain'.'$domain_name >> /etc/hosts"
 fi
-while [ -z $subdomain ] || [[ ! $subdomain =~ $regex ]]
+while [ -z $n8n_subdomain ] || [[ ! $n8n_subdomain =~ $regex ]]
 do
-        echo "Try again"
-        sudo -- sh -c -e "sed -i '/$subdomain/d' /etc/hosts"
-        if [ "$which_h" == "localhost" ]
-        then
-                read -p 'Enter Subdomain (default: n8n): ' subdomain
-                sudo -- sh -c -e "grep -qxF '127.0.1.1  '$subdomain'.'$domain_name /etc/hosts || echo '127.0.1.1  '$subdomain'.'$domain_name >> /etc/hosts"
-        else
-                read -p 'Enter Subdomain (default: n8n): ' subdomain
-        fi
-        sleep 1
-		: ${subdomain:=n8n}
+	echo "Try again"
+	sudo -- sh -c -e "sed -i '/$n8n_subdomain/d' /etc/hosts"
+	if [ "$which_h" == "localhost" ]
+	then
+		read -p 'Enter n8n Interface Subdomain (default: n8n): ' n8n_subdomain
+		sudo -- sh -c -e "grep -qxF '127.0.1.1  '$n8n_subdomain'.'$domain_name /etc/hosts || echo '127.0.1.1  '$n8n_subdomain'.'$domain_name >> /etc/hosts"
+	else
+		read -p 'Enter n8n Interface Subdomain (default: n8n): ' n8n_subdomain
+	fi
+	sleep 1
+	: ${n8n_subdomain:=n8n}
+done
+echo "Ok."
+
+webui_subdomain=""
+regex="^[a-z0-9-]+(\.[a-z0-9-]+)*$"
+read -p 'Enter Web AI Interface Subdomain (default : ai): ' webui_subdomain
+: ${webui_subdomain:=ai}
+if [ "$which_h" == "localhost" ]
+then
+	sudo -- sh -c -e "grep -qxF '127.0.1.1  '$webui_subdomain'.'$domain_name /etc/hosts || echo '127.0.1.1  '$webui_subdomain'.'$domain_name >> /etc/hosts"
+fi
+while [ -z $webui_subdomain ] || [[ ! $webui_subdomain =~ $regex ]] || [[ $webui_subdomain == $n8n_subdomain ]]
+do
+	echo "Try again"
+	sudo -- sh -c -e "sed -i '/$webui_subdomain/d' /etc/hosts"
+	if [ "$which_h" == "localhost" ]
+	then
+		read -p 'Enter Web AI Interface Subdomain (default: ai): ' webui_subdomain
+		sudo -- sh -c -e "grep -qxF '127.0.1.1  '$webui_subdomain'.'$domain_name /etc/hosts || echo '127.0.1.1  '$webui_subdomain'.'$domain_name >> /etc/hosts"
+	else
+		read -p 'Enter Web AI Interface Subdomain (default: ai): ' webui_subdomain
+	fi
+	sleep 1
+	: ${webui_subdomain:=ai}
 done
 echo "Ok."
 
@@ -372,7 +408,7 @@ then
 		sudo zypper install mozilla-nss-tools go git
 	elif [ "$lpms" == "apt" ]
 	then
-		sudo apt install libnss3-tools go git
+		sudo apt install libnss3-tools golang-go git
 	elif [ "$lpms" == "pacman" ]
 	then
 		sudo pacman -S nss go git
@@ -382,11 +418,14 @@ then
 		echo ""
 		exit 0
 	fi
-	sudo rm -Rf mkcert && git clone https://github.com/FiloSottile/mkcert && cd mkcert && go build -ldflags "-X main.Version=$(git describe --tags)"
-	sudo mkcert -uninstall && mkcert -install && mkcert -key-file privkey.pem -cert-file chain.pem $domain_name *.$domain_name && sudo cat privkey.pem chain.pem > fullchain.pem && sudo mkdir -p ../certbot/live/$domain_name && sudo mv *.pem ../certbot/live/$domain_name && cd ..
+	sudo rm -Rf mkcert && git clone https://github.com/FiloSottile/mkcert &&
+	cd mkcert
+	sudo go build -ldflags "-X main.Version=$(git describe --tags)"
+	sudo ./mkcert -uninstall && ./mkcert -install && ./mkcert -key-file privkey.pem -cert-file chain.pem $domain_name *.$domain_name && sudo cat privkey.pem chain.pem > fullchain.pem && sudo mkdir -p ../certbot/live/$domain_name && sudo mv *.pem ../certbot/live/$domain_name && sudo chown -R 5050:5050 ../certbot/live/$domain_name
+	cd ..
 	echo "Ok."
 else
-	ssl_snippet="certbot certonly --webroot --webroot-path \/tmp\/acme-challenge --rsa-key-size 4096 --non-interactive --agree-tos --no-eff-email --force-renewal --email \$\{LETSENCRYPT_EMAIL\} -d \$\{DOMAIN_NAME\} -d www.\$\{DOMAIN_NAME\} -d \$\{SUBDOMAIN\}.\$\{DOMAIN_NAME\}"
+	ssl_snippet="certbot certonly --webroot --webroot-path \/tmp\/acme-challenge --rsa-key-size 4096 --non-interactive --agree-tos --no-eff-email --force-renewal --email \$\{LETSENCRYPT_EMAIL\} -d \$\{DOMAIN_NAME\} -d www.\$\{DOMAIN_NAME\} -d mail.\$\{DOMAIN_NAME\} -d \$\{N8N_SUBDOMAIN\}.\$\{DOMAIN_NAME\} -d \$\{WEBUI_ SUBDOMAIN\}.\$\{DOMAIN_NAME\}"
 fi
 
 # set parameters in env.example file
@@ -397,6 +436,49 @@ while [ -z $email ] || [[ ! $email =~ $regex ]]
 do
 	echo "Try again"
 	read -p 'Enter Email Address for letsencrypt ssl(e.g. : email@domain.com): ' email
+	sleep 1
+done
+echo "Ok."
+
+db_username=""
+db_regex="^[0-9a-zA-Z\$_]{6,}$"
+read -p 'Enter Database Username(at least 6 characters): ' db_username
+while [[ ! $db_username =~ $db_regex ]]
+do
+	echo "Try again (can only contain numerals 0-9, basic Latin letters, both lowercase and uppercase, dollar sign and underscore)"
+	read -p 'Enter Database Username(at least 6 characters): ' db_username
+	sleep 1
+done
+echo "Ok."
+
+db_password=""
+password_regex="^[a-zA-Z0-9\._-]{6,}$"
+read -p 'Enter Database Password(at least 6 characters): ' db_password
+while [[ ! $db_password =~ $password_regex ]]
+do
+	echo "Try again (can only contain numerals 0-9, basic Latin letters, both lowercase and uppercase, dot, underscore and minus sign)"
+	read -p 'Enter Database Password(at least 6 characters): ' db_password
+	sleep 1
+done
+echo "Ok."
+
+read -p 'Enter Database Name(at least 6 characters, default: postgres): ' db_name
+: ${db_name:=postgres}
+while [[ ! $db_name =~ $db_regex ]]
+do
+	echo "Try again (can only contain numerals 0-9, basic Latin letters, both lowercase and uppercase, dollar sign and underscore)"
+	read -p 'Enter Database Name(at least 6 characters, default: postgres): ' db_name
+	sleep 1
+	: ${db_name:=postgres}
+done
+echo "Ok."
+
+pga_password=""
+read -p 'Enter PgAdmin Password(at least 6 characters): ' pga_password
+while [[ ! $pga_password =~ $password_regex ]]
+do
+	echo "Try again (can only contain numerals 0-9, basic Latin letters, both lowercase and uppercase, dot, underscore and minus sign)"
+	read -p 'Enter PgAdmin Password(at least 6 characters): ' pga_password
 	sleep 1
 done
 echo "Ok."
@@ -424,9 +506,14 @@ esac
 \cp env.example .env
 
 sed -i 's/example.com/'$domain_name'/' .env
-sed -i 's/subdomain/'$subdomain'/' .env
+sed -i 's/n8n_subdomain/'$n8n_subdomain'/g' .env
+sed -i 's/webui_subdomain/'$webui_subdomain'/g' .env
 sed -i 's/email@domain.com/'$email'/' .env
 sed -i "s/ssl_snippet/$ssl_snippet/" .env
+sed -i 's/db_username/'$db_username'/g' .env
+sed -i 's/db_password/'$db_password'/g' .env
+sed -i 's/db_name/'$db_name'/' .env
+sed -i 's/pga_password/'$pga_password'/' .env
 sed -i "s@directory_path@$(pwd)@" .env
 sed -i 's/local_timezone/'$local_timezone'/' .env
 
@@ -468,8 +555,11 @@ if [ -x "$(command -v docker)" ] && [ "$(docker compose version)" ]; then
 			echo ""
 			echo "completed setup"
 			echo ""
-			echo "n8n: https://$subdomain.$domain_name"
+			echo "n8n: https://$n8n_subdomain.$domain_name"
 			echo "Website: https://$domain_name"
+			echo "AI Website: https://$webui_subdomain.$domain_name"
+			echo "Pgadmin: https://$domain_name:9090"
+			echo "Mail: https://mail.$domain_name"
 			echo "Portainer: https://$domain_name:9001"
 			echo ""
 			echo "Ok."

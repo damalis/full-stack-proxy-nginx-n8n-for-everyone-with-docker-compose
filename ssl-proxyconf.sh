@@ -11,8 +11,8 @@ if [ ! -f $2/ssl-dhparam.pem 2>/dev/null ]; then
 fi
 
 use_lets_encrypt_certificates() {
-	echo "switching proxy to use Let's Encrypt certificate for $1"	
-	sed '/#location.\/./,/#}/ s/#//; s/#listen/listen/g; s/#ssl_/ssl_/g' $3/conf.d/default.conf > $3/conf.d/default.conf.bak
+	echo "switching proxy to use Let's Encrypt certificate for $1"
+	sed '/#location.\/./,/#}/ s/#//; s/#listen/listen/g; s/#ssl_/ssl_/g; s/#server_name/server_name/' $3/conf.d/default.conf > $3/conf.d/default.conf.bak
 }
 
 reload_proxy() {
