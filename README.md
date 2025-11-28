@@ -4,6 +4,11 @@ If You want to install n8n at short time;
 
 <mark>"Develop locally, publish globally"</mark>
 
+Benefits
+: No authorization is required
+: No credentials are required.
+: No quotas
+
 #### Full stack Proxy Nginx n8n:
 <p align="left">
 <a href="https://n8n.io/" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/45487711?s=200&v=4" alt="n8n" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
@@ -54,7 +59,6 @@ Plus, manage docker containers with Portainer.
 #### With this project you can quickly run the following:
 
 - [n8n](https://hub.docker.com/r/n8nio/n8n)
-- [Ollama](https://hub.docker.com/r/ollama/ollama)
 - [mailhog](https://github.com/mailhog)
 - [postgreSQL](https://hub.docker.com/_/postgres)
 - [pgvector](https://hub.docker.com/r/pgvector/pgvector)
@@ -301,7 +305,7 @@ You can also visit `https://example.com:9090`.
 
 The login screen, |```username: ${LETSENCRYPT_EMAIL}``` and ```password: ${PGA_CONTROLPASS}```| in the `.env` file.
 
-You don't see the login page in your browser;
+You don't see the login page in your browser;\
 pgAdmin runs as the pgadmin user (UID: 5050) in the pgadmin group (GID: 5050) in the container.
 You must ensure that all files are readable, and where necessary (e.g. the working/session directory) writeable for this user on the host machine.
 
@@ -310,6 +314,9 @@ You must ensure that all files are readable, and where necessary (e.g. the worki
 #### Ollama
 
 Base URL; |```http://ollama:11434```|
+
+Now you can pull a model: ```docker exec -it ollama ollama pull llama3```\
+More models can be found on the [https://ollama.com/library](https://ollama.com/library).
 
 #### Open WEBUI
 
