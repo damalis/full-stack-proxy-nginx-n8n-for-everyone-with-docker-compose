@@ -2,9 +2,9 @@
 
 If You want to install n8n at short time;
 
-````
+```
 "Develop locally, publish globally"
-````
+```
 
 #### Full stack Proxy Nginx n8n:
 <p align="left">
@@ -281,27 +281,21 @@ docker compose up -d	# Starts services in detached mode (in the background)
 
 [n8n](https://docs.n8n.io/hosting/) This page provides guidance on setting up n8n for both the Enterprise and Community self-hosted editions. The Community edition is free, the Enterprise edition isn't..
 
-#### Ollama
-
-Base url; |```Host: http://ollama:11434;```|
-
 #### Mail
 
-SMTP settings; ```Host: mail; Port: 1025;```
+Send Email Node;
 
-The authorize screen, |```username: ${DB_USER}```| and |```password: ${DB_PASSWORD}```| in the `.env` file.
+SMTP account: ```Host: mail; Port: 1025;```
+
+The authorize screen: |```user: ${DB_USER}```| and |```password: ${DB_PASSWORD}```| in the `.env` file.
 
 #### Database
 
-; |```Host: database; Port: 5432;```|
-
-The authorize screen, |```username: ${DB_USER}```|, |```password: ${DB_PASSWORD}```| and |```database name: ${DB_NAME}```| in the `.env` file.
+Postgres account; |```Host: database; Port: 5432; Database: ${DB_NAME}; User: ${DB_USER}; Password: ${DB_PASSWORD}```| in the `.env` file.
 
 #### pgvector
 
-; |```Host: pgvector; Port: 15432;```|
-
-The authorize screen, |```username: ${DB_USER}```, ```password: ${DB_PASSWORD}``` and ```database name: ${DB_NAME}```| in the `.env` file.
+Postgres vector account; |```Host: pgvector; Port: 15432; Database: ${DB_NAME}; User: ${DB_USER}; Password: ${DB_PASSWORD}```| in the `.env` file.
 
 #### pgAdmin
 
@@ -311,7 +305,7 @@ The login screen, |```username: ${LETSENCRYPT_EMAIL}``` and ```password: ${PGA_C
 
 #### Ollama
 
-The login screen, |```username: http://ollama:11434```|.
+Base URL; |```http://ollama:11434```|
 
 #### Open WEBUI
 
