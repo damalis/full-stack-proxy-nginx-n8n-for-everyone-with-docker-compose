@@ -2,9 +2,7 @@
 
 If You want to install n8n at short time;
 
-```
-"Develop locally, publish globally"
-```
+<mark>"Develop locally, publish globally"</mark>
 
 #### Full stack Proxy Nginx n8n:
 <p align="left">
