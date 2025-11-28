@@ -195,7 +195,7 @@ then reloading for proxy ssl configuration
 docker container restart proxy
 ```
 
-The containers are now built and running. You should be able to access the n8n installation with the configured IP in the browser address. `https://subdomain.example.com`.
+The containers are now built and running. You should be able to access the n8n installation with the configured IP in the browser address. `https://n8n_subdomain.example.com`.
 
 For convenience you may add a new entry into your hosts file.
 
@@ -300,6 +300,12 @@ Postgres vector account; |```Host: pgvector; Port: 15432; Database: ${DB_NAME}; 
 You can also visit `https://example.com:9090`.
 
 The login screen, |```username: ${LETSENCRYPT_EMAIL}``` and ```password: ${PGA_CONTROLPASS}```| in the `.env` file.
+
+You don't see the login page in your browser;
+pgAdmin runs as the pgadmin user (UID: 5050) in the pgadmin group (GID: 5050) in the container.
+You must ensure that all files are readable, and where necessary (e.g. the working/session directory) writeable for this user on the host machine.
+
+```sudo chown -R 5050:5050 ./pgadmin``` and/or ```sudo chown -R 5050:5050 ./certbot/live/${DOMAIN_NAME}```
 
 #### Ollama
 
