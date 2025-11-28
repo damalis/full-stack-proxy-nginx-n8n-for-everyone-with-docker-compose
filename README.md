@@ -2,9 +2,9 @@
 
 If You want to install n8n at short time;
 
-```ruby
+````
 "Develop locally, publish globally"
-```
+````
 
 #### Full stack Proxy Nginx n8n:
 <p align="left">
