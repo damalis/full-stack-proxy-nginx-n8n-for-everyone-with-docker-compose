@@ -40,7 +40,7 @@ server {
 	#listen 443 ssl;
 	#listen [::]:443 ipv6only=on ssl;
 	#
-	server_name ${N8N_SUBDOMAIN}.${NGINX_HOST};
+	#server_name ${N8N_SUBDOMAIN}.${NGINX_HOST};
 	#
 	#ssl_certificate /etc/letsencrypt/live/${NGINX_HOST}/fullchain.pem;
 	#ssl_certificate_key /etc/letsencrypt/live/${NGINX_HOST}/privkey.pem;
@@ -80,7 +80,7 @@ server {
 server {
 	#listen 443 ssl;
 	#
-	server_name mail.${NGINX_HOST};
+	#server_name mail.${NGINX_HOST};
 	
 	location / {		
 		proxy_pass	http://docker_mail;		
@@ -112,7 +112,7 @@ server {
 server {
 	#listen 443 ssl;
 	#
-	server_name ${WEBUI_SUBDOMAIN}.${NGINX_HOST};
+	#server_name ${WEBUI_SUBDOMAIN}.${NGINX_HOST};
 	
 	location / {		
 		proxy_pass	http://docker_webui;
