@@ -390,6 +390,30 @@ do
 done
 echo "Ok."
 
+whatsapp_subdomain=""
+regex="^[a-z0-9-]+(\.[a-z0-9-]+)*$"
+read -p 'Enter Whatsapp Dashboard Subdomain (default : whatsapp): ' whatsapp_subdomain
+: ${whatsapp_subdomain:=whatsapp}
+if [ "$which_h" == "localhost" ]
+then
+        sudo -- sh -c -e "grep -qxF '127.0.1.1  '$whatsapp_subdomain'.'$domain_name /etc/hosts || echo '127.0.1.1  '$whatsapp_subdomain'.'$domain_name >> /etc/hosts"
+fi
+while [ -z $whatsapp_subdomain ] || [[ ! $whatsapp_subdomain =~ $regex ]] || [[ $whatsapp_subdomain == $n8n_subdomain ]] || [[ $whatsapp_subdomain == $webui_subdomain ]]
+do
+        echo "Try again"
+        sudo -- sh -c -e "sed -i '/$whatsapp_subdomain/d' /etc/hosts"
+        if [ "$which_h" == "localhost" ]
+        then
+                read -p 'Enter Whatsapp Dashboard Subdomain (default: whatsapp): ' whatsapp_subdomain
+                sudo -- sh -c -e "grep -qxF '127.0.1.1  '$whatsapp_subdomain'.'$domain_name /etc/hosts || echo '127.0.1.1  '$whatsapp_subdomain'.'$domain_name >> /etc/hosts"
+        else
+                read -p 'Enter Whatsapp Dashboard Subdomain (default: ai): ' whatsapp_subdomain
+        fi
+        sleep 1
+        : ${whatsapp_subdomain:=whatsapp}
+done
+echo "Ok."
+
 ssl_snippet=""
 if [ "$which_h" == "localhost" ]
 then
@@ -425,7 +449,7 @@ then
 	cd ..
 	echo "Ok."
 else
-	ssl_snippet="certbot certonly --webroot --webroot-path \/tmp\/acme-challenge --rsa-key-size 4096 --non-interactive --agree-tos --no-eff-email --force-renewal --email \$\{LETSENCRYPT_EMAIL\} -d \$\{DOMAIN_NAME\} -d www.\$\{DOMAIN_NAME\} -d mail.\$\{DOMAIN_NAME\} -d $n8n_subdomain.\$\{DOMAIN_NAME\} -d $webui_subdomain.\$\{DOMAIN_NAME\}"
+	ssl_snippet="certbot certonly --webroot --webroot-path \/tmp\/acme-challenge --rsa-key-size 4096 --non-interactive --agree-tos --no-eff-email --force-renewal --email \$\{LETSENCRYPT_EMAIL\} -d \$\{DOMAIN_NAME\} -d www.\$\{DOMAIN_NAME\} -d mail.\$\{DOMAIN_NAME\} -d $n8n_subdomain.\$\{DOMAIN_NAME\} -d $webui_subdomain.\$\{DOMAIN_NAME\} -d $whatsapp_subdomain.\$\{DOMAIN_NAME\}"
 fi
 
 # set parameters in env.example file
@@ -506,8 +530,9 @@ esac
 \cp env.example .env
 
 sed -i 's/example.com/'$domain_name'/' .env
-sed -i 's/n8n_subdomain/'$n8n_subdomain'/g' .env
-sed -i 's/webui_subdomain/'$webui_subdomain'/g' .env
+sed -i 's/n8n_subdomain/'$n8n_subdomain'/' .env
+sed -i 's/webui_subdomain/'$webui_subdomain'/' .env
+sed -i 's/whatsapp_subdomain/'$whatsapp_subdomain'/' .env
 sed -i 's/email@domain.com/'$email'/' .env
 sed -i "s/ssl_snippet/$ssl_snippet/" .env
 sed -i 's/db_username/'$db_username'/g' .env
@@ -560,6 +585,8 @@ if [ -x "$(command -v docker)" ] && [ "$(docker compose version)" ]; then
 			echo "AI Website: https://$webui_subdomain.$domain_name"
 			echo "Pgadmin: https://$domain_name:9090"
 			echo "Mail: https://mail.$domain_name"
+			echo "Whatsapp - dashboard: https://$whatsapp_subdomain.$domain_name/dashboard"
+			echo "Whatsapp - swagger: https://whatsapp_subdomain.$domain_name"
 			echo "Portainer: https://$domain_name:9001"
 			echo ""
 			echo "Ok."

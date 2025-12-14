@@ -6,8 +6,8 @@ If You want to install n8n at short time;
 
 #### Benefits
 - No authorization is required
-- No credentials are required.
-- No quotas
+- No paid credentials are required.
+- No quota
 
 #### Full stack Proxy Nginx n8n:
 <p align="left">
@@ -19,6 +19,8 @@ If You want to install n8n at short time;
 <a href="https://www.pgadmin.org/" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/113517144?s=200&v=4" alt="pgadmin" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
 <a href="https://www.docker.com/" target="_blank" rel="noreferrer" style="text-decoration: none;"> <img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/docker/docker.png" alt="docker" width="40" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
 <a href="https://www.nginx.com" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/1412239?s=200&v=4" alt="nginx" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
+<a href="https://redis.io" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/1529926?s=200&v=4" alt="redis" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
+<a href="https://waha.devlike.pro/" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/116792460?s=200&v=4" alt="waha" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
 <a href="https://en.wikipedia.org/wiki/Bash_(Unix_shell)" target="_blank" rel="noreferrer" style="text-decoration: none;"> <img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/bash/bash.png" alt="Bash" height="50" width="50" style="max-width: 100%;"> </a>&nbsp;&nbsp;&nbsp; 
 <a href="https://letsencrypt.org/" target="_blank" rel="noreferrer" style="text-decoration: none;"> <img src="https://avatars.githubusercontent.com/u/9289019?s=200&v=4" alt="letsencrypt" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
 <a href="https://certbot.eff.org/" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/17889013?s=200&v=4" alt="certbot" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
@@ -67,6 +69,8 @@ Plus, manage docker containers with Portainer.
 - [Open WEBUI](https://github.com/open-webui/open-webui)
 - [proxy (nginx)](https://hub.docker.com/_/nginx)
 - [certbot (letsencrypt)](https://hub.docker.com/r/certbot/certbot)
+- [redis](https://hub.docker.com/_/redis)
+- [WAHA](https://hub.docker.com/r/devlikeapro/waha)
 
 #### For certbot (letsencrypt) certificate:
 
@@ -92,11 +96,13 @@ Create rules to open ports to the internet, or to a specific IPv4 address or ran
 	- [Ollama](#ollama)
     - [Mail](#mail)
 	- [Database](#database)
-	- [Pgvector](#pgvector)
+	- [Datavector](#datavector)
 	- [pgAdmin](#pgadmin)
 	- [Ollama](#ollama)
 	- [Open WEBUI](#open-webui)
 	- [Proxy](#proxy)
+	- [Redis](#redis)
+	- [WhatsApp](#whatsapp)
 
 ### Automatic
 
@@ -174,7 +180,7 @@ Edit the `.env` file to change values of
   </tr>
   <tr>
     <td>remotehost</td>
-    <td><code>certbot certonly --webroot --webroot-path /tmp/acme-challenge --rsa-key-size 4096 --non-interactive --agree-tos --no-eff-email --force-renewal --email ${LETSENCRYPT_EMAIL} -d ${DOMAIN_NAME} -d www.${DOMAIN_NAME}</code></td>
+    <td><code>certbot certonly --webroot --webroot-path /tmp/acme-challenge --rsa-key-size 4096 --non-interactive --agree-tos --no-eff-email --force-renewal --email ${LETSENCRYPT_EMAIL} -d ${DOMAIN_NAME} -d www.${DOMAIN_NAME} -d mail.${DOMAIN_NAME} -d ${N8N_SUBDOMAIN}.${DOMAIN_NAME} -d ${WEBUI_SUBDOMAIN}.${DOMAIN_NAME} -d ${WHATSAPP_SUBDOMAIN}.${DOMAIN_NAME}</code></td>
   </tr>
 </tbody>
 </table>
@@ -199,7 +205,7 @@ then reloading for proxy ssl configuration
 docker container restart proxy
 ```
 
-The containers are now built and running. You should be able to access the n8n installation with the configured IP in the browser address. `https://n8n_subdomain.example.com`.
+The containers are now built and running. You should be able to access the n8n installation with the configured IP in the browser address. `https://${N8N_SUBDOMAIN}.${DOMAIN_NAME}`.
 
 For convenience you may add a new entry into your hosts file.
 
@@ -211,7 +217,7 @@ docker compose -f portainer-docker-compose.yml -p portainer up -d
 
 manage docker with [Portainer](https://www.portainer.io/) is the definitive container management tool for Docker, Docker Swarm with it's highly intuitive GUI and API. 
 
-You can also visit `https://example.com:9001` to access portainer after starting the containers.
+You can also visit `https://${DOMAIN_NAME}:9001` to access portainer after starting the containers.
 
 ### Usage
 
@@ -287,7 +293,7 @@ docker compose up -d	# Starts services in detached mode (in the background)
 
 Send Email Node;
 
-SMTP account: ```Host: mail; Port: 1025;```
+SMTP account: ```Host: mail; Port: 1025; SSL/TLS: off;```
 
 The authorize screen: |```user: ${DB_USER}```| and |```password: ${DB_PASSWORD}```| in the `.env` file.
 
@@ -295,13 +301,13 @@ The authorize screen: |```user: ${DB_USER}```| and |```password: ${DB_PASSWORD}`
 
 Postgres account; |```Host: database; Port: 5432; Database: ${DB_NAME}; User: ${DB_USER}; Password: ${DB_PASSWORD}```| in the `.env` file.
 
-#### pgvector
+#### Datavector
 
-Postgres vector account; |```Host: pgvector; Port: 15432; Database: ${DB_NAME}; User: ${DB_USER}; Password: ${DB_PASSWORD}```| in the `.env` file.
+Postgres vector account; |```Host: datavector; Port: 15432; Database: ${DB_NAME}; User: ${DB_USER}; Password: ${DB_PASSWORD}```| in the `.env` file.
 
 #### pgAdmin
 
-You can also visit `https://example.com:9090`.
+You can also visit `https://${DOMAIN_NAME}:9090`.
 
 The login screen, |```username: ${LETSENCRYPT_EMAIL}``` and ```password: ${PGA_CONTROLPASS}```| in the `.env` file.
 
@@ -320,7 +326,7 @@ More models can be found on the [https://ollama.com/library](https://ollama.com/
 
 #### Open WEBUI
 
-You can also visit `https://${WEBUI_SUBDOMAIN}.example.com`.
+You can also visit `https://${WEBUI_SUBDOMAIN}.${DOMAIN_NAME}`.
 
 [Environment Variable Configuration](https://docs.openwebui.com/getting-started/env-configuration)
 
@@ -331,3 +337,23 @@ Proxying is typically used to distribute the load among several servers, seamles
 add or remove code in the ```./proxy/templates/proxy.conf.template``` file for custom proxy configurations
 
 [https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/)
+
+#### Redis
+
+Configuration; |```Host: redis```|
+
+#### WhatsApp
+
+API URL; |```https://${WHATSAPP_SUBDOMAIN}.${DOMAIN_NAME}```| and API Key; |```${WHATSAPP_API_KEY}```| in the `.env` file.
+
+You can also visit `https://${WHATSAPP_SUBDOMAIN}.${DOMAIN_NAME}/dashboard` and swagger page - `https://${WHATSAPP_SUBDOMAIN}.${DOMAIN_NAME}`.
+
+The authorize screen: |```Username: ${DB_USER}```| and |```Password: ${DB_PASSWORD}```| in the `.env` file.
+
+[n8n Integration](https://waha.devlike.pro/docs/integrations/n8n/)
+
+[Configuration](https://waha.devlike.pro/docs/how-to/dashboard/#api-key)
+
+[Get and scan QR](https://waha.devlike.pro/docs/overview/quick-start/#step-5-get-and-scan-qr)
+
+[Guide](https://waha.devlike.pro/docs/overview/introduction/)
