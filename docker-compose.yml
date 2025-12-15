@@ -126,7 +126,7 @@ services:
             PGADMIN_DEFAULT_PASSWORD: '${PGA_CONTROLPASS}'
             PGADMIN_ENABLE_TLS: true
             PGADMIN_DISABLE_POSTFIX: true
-            PGADMIN_CONFIG_MAIL_SERVER: 'mail'
+            PGADMIN_CONFIG_MAIL_SERVER: '"mail"'
             PGADMIN_CONFIG_MAIL_PORT: 1025
             TZ: '${LOCAL_TIMEZONE}'
 
