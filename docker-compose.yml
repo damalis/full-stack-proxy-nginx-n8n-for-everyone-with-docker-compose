@@ -163,10 +163,11 @@ services:
             - backend
         volumes:
             - 'datavector:${POSTGRESQL_CONF_PREFIX}'
+            - './datavector/init.sql:/docker-entrypoint-initdb.d/init.sql'
         hostname: datavector
         restart: unless-stopped
         ports:
-            - '15432:5432'
+            - '5433:5432'
         shm_size: 1g
         environment:
             PG_MAJOR: 18
