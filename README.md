@@ -367,7 +367,7 @@ The authorize screen: |```Username: ${DB_USER}```| and |```Password: ${DB_PASSWO
 
 Open WEBUI Manage Configurations `https://${WEBUI_SUBDOMAIN}.${DOMAIN_NAME}`:
 
-Go to **Admin Panel -> Settings -> Pipelines**.
+Go to **Admin Panel >> Settings -> Pipelines**.
 
 Select your pipeline and adjust valve values directly from the WebUI.
 
