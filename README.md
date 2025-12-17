@@ -17,10 +17,12 @@ If You want to install n8n at short time;
 <a href="https://www.postgresql.org/" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/177543?s=200&v=4" alt="postgresql" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
 <a href="https://github.com/pgvector" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/98363230?s=200&v=4" alt="pgvector" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
 <a href="https://www.pgadmin.org/" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/113517144?s=200&v=4" alt="pgadmin" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
+<a href="https://openwebui.com/" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/158137808?s=200&v=4" alt="open webui" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
 <a href="https://www.docker.com/" target="_blank" rel="noreferrer" style="text-decoration: none;"> <img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/docker/docker.png" alt="docker" width="40" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
 <a href="https://www.nginx.com" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/1412239?s=200&v=4" alt="nginx" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
 <a href="https://redis.io" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/1529926?s=200&v=4" alt="redis" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
 <a href="https://waha.devlike.pro/" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/116792460?s=200&v=4" alt="waha" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
+<a href="https://docs.openwebui.com/features/pipelines/" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/158137808?s=200&v=4" alt="pipelines" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
 <a href="https://en.wikipedia.org/wiki/Bash_(Unix_shell)" target="_blank" rel="noreferrer" style="text-decoration: none;"> <img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/bash/bash.png" alt="Bash" height="50" width="50" style="max-width: 100%;"> </a>&nbsp;&nbsp;&nbsp; 
 <a href="https://letsencrypt.org/" target="_blank" rel="noreferrer" style="text-decoration: none;"> <img src="https://avatars.githubusercontent.com/u/9289019?s=200&v=4" alt="letsencrypt" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
 <a href="https://certbot.eff.org/" target="_blank" rel="noreferrer"> <img src="https://avatars.githubusercontent.com/u/17889013?s=200&v=4" alt="certbot" height="40" width="40"/> </a>&nbsp;&nbsp;&nbsp; 
@@ -71,6 +73,7 @@ Plus, manage docker containers with Portainer.
 - [certbot (letsencrypt)](https://hub.docker.com/r/certbot/certbot)
 - [redis](https://hub.docker.com/_/redis)
 - [WAHA](https://hub.docker.com/r/devlikeapro/waha)
+- [Pipelines](https://github.com/open-webui/pipelines)
 
 #### For certbot (letsencrypt) certificate:
 
@@ -103,6 +106,7 @@ Create rules to open ports to the internet, or to a specific IPv4 address or ran
 	- [Proxy](#proxy)
 	- [Redis](#redis)
 	- [WhatsApp](#whatsapp)
+	- [Pipelines](#pipelines)
 
 ### Automatic
 
@@ -358,3 +362,13 @@ The authorize screen: |```Username: ${DB_USER}```| and |```Password: ${DB_PASSWO
 [Get and scan QR](https://waha.devlike.pro/docs/overview/quick-start/#step-5-get-and-scan-qr)
 
 [Guide](https://waha.devlike.pro/docs/overview/introduction/)
+
+#### Pipelines
+
+Open WEBUI Manage Configurations `https://${WEBUI_SUBDOMAIN}.${DOMAIN_NAME}`:
+
+Go to **Admin Panel -> Settings -> Pipelines**.
+
+Select your pipeline and adjust valve values directly from the WebUI.
+
+For integration examples, visit https://github.com/open-webui/pipelines/blob/main/examples, which demonstrates how to build custom pipelines for various use cases.
