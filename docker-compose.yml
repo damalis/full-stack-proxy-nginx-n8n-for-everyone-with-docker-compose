@@ -229,14 +229,14 @@ services:
             interval: 5s
             timeout: 5s
             retries: 100
-        extra_hosts:
-            - host.docker.internal:host-gateway
         environment:
             OLLAMA_BASE_URL: 'http://ollama:11434'
             WEBUI_URL: 'https://${WEBUI_SUBDOMAIN}.${DOMAIN_NAME}'
+            OPENAI_API_BASE_URLS: 'https://api.openai.com/v1;http://pipelines:9099'
+            OPENAI_API_KEYS: '${WEBUI_API_KEY};${PIPELINES_API_KEY}'
             DEFAULT_LOCALE: 'en'
             WEBUI_NAME: 'Damalis Ollama WebUI'
-            WEBUI_SECRET_KEY: 't0p-s3cr3t'
+            WEBUI_SECRET_KEY: '${WEBUI_SECRET_KEY}'
             TZ: '${LOCAL_TIMEZONE}'
 
     redis:
@@ -298,6 +298,25 @@ services:
             WHATSAPP_SWAGGER_PASSWORD: '${WHATSAPP_SWAGGER_PASSWORD}'
             TZ: '${LOCAL_TIMEZONE}'
 
+    pipelines:
+        depends_on:
+            webui:
+                condition: service_healthy
+        image: ghcr.io/open-webui/pipelines:main
+        container_name: pipelines
+        networks:
+            - backend
+        volumes:
+            - 'dtpipelines:/app/pipelines'
+        hostname: pipelines
+        restart: unless-stopped
+        ports:
+            - '9099:9099'
+        environment:
+            PIPELINES_API_KEY: '${PIPELINES_API_KEY}'
+            PIPELINES_REQUIREMENTS_PATH: '/app/requirements-minimum.txt'
+            TZ: '${LOCAL_TIMEZONE}'
+            
 networks:
     backend: null
     frontend: null
@@ -319,3 +338,5 @@ volumes:
         name: datavector-data
     dtredis:
         name: redis-data
+    dtpipelines:
+        name: pipelines-data
