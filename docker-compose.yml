@@ -29,7 +29,8 @@ services:
 
     certbot:
         depends_on:
-            - proxy
+            proxy:
+                condition: service_healthy
         image: certbot/certbot:latest
         container_name: certbot
         networks:
@@ -65,8 +66,8 @@ services:
               source: ./proxy/templates/proxy.conf.template
               target: '${PROXY_PREFIX}/templates/default.conf.template'
             - type: bind
-              source: ./proxy/ssl-option/options-ssl-nginx.conf
-              target: '${LETSENCRYPT_CONF_PREFIX}/options-ssl-nginx.conf'
+              source: ./proxy/ssl-option/options-ssl-nginx-proxy.conf
+              target: '${LETSENCRYPT_CONF_PREFIX}/options-ssl-nginx-proxy.conf'
             - type: bind
               source: ./ssl-proxyconf.sh
               target: '/tmp/ssl-proxyconf.sh'
@@ -77,6 +78,11 @@ services:
         ports:
             - '80:80'
             - '443:443'
+        healthcheck:
+            test: ["CMD-SHELL", "/bin/pidof nginx > /dev/null || exit 1"]
+            interval: 10s
+            timeout: 5s
+            retries: 20
         environment:
             NGINX_HOST: ${DOMAIN_NAME}
             N8N_SUBDOMAIN: ${N8N_SUBDOMAIN}
@@ -146,7 +152,7 @@ services:
 #            test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME} || exit 1"]
 #            interval: 5s
 #            timeout: 5s
-#            retries: 10
+#            retries: 20
         environment:
             POSTGRES_DB: '${DB_NAME}'
             POSTGRES_USER: '${DB_USER}'
