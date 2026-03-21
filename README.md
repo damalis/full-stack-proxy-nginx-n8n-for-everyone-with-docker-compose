@@ -283,7 +283,7 @@ docker container logs container_name_or_id	# Shows logs from all services
 Copy all files into a new directory:
 
 ```
-docker compose up -d	# Starts services in detached mode (in the background)
+docker compose up -d # Starts services in detached mode (in the background)
 ```
 
 #### Docker run reference
