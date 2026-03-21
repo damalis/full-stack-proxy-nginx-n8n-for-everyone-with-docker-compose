@@ -50,7 +50,7 @@ server {
 	#ssl_certificate_key /etc/letsencrypt/live/${NGINX_HOST}/privkey.pem;
 	#ssl_trusted_certificate /etc/letsencrypt/live/${NGINX_HOST}/chain.pem;
 	#ssl_dhparam /etc/letsencrypt/ssl-dhparam.pem;
-	include /etc/letsencrypt/options-ssl-nginx.conf;
+	include /etc/letsencrypt/options-ssl-nginx-proxy.conf;
 
         if ( $host = www.${NGINX_HOST} ) {
                return 301 https://${N8N_SUBDOMAIN}.${NGINX_HOST}$request_uri;
