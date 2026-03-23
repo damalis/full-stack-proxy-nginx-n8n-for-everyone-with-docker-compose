@@ -123,7 +123,7 @@ Open a terminal and `cd` to the folder in which `docker-compose.yml` is saved an
 ```
 cd full-stack-proxy-nginx-n8n-for-everyone-with-docker-compose
 chmod +x install.sh
-./install.sh
+LC_ALL=C.UTF-8 ./install.sh # LC_ALL=C.UTF-8 if not os language english
 ```
 
 ### Manual
@@ -210,7 +210,7 @@ then reloading for proxy ssl configuration
 docker container restart proxy
 ```
 
-The containers are now built and running. You should be able to access the n8n installation with the configured IP in the browser address. `https://${N8N_SUBDOMAIN}.${DOMAIN_NAME}`.
+The containers are now built and running. You should be able to access the n8n installation with the configured IP in the browser address. `https://N8N_SUBDOMAIN.DOMAIN_NAME`.
 
 For convenience you may add a new entry into your hosts file.
 
@@ -222,7 +222,7 @@ docker compose -f portainer-docker-compose.yml -p portainer up -d
 
 manage docker with [Portainer](https://www.portainer.io/) is the definitive container management tool for Docker, Docker Swarm with it's highly intuitive GUI and API. 
 
-You can also visit `https://${DOMAIN_NAME}:9001` to access portainer after starting the containers.
+You can also visit `https://DOMAIN_NAME:9001` to access portainer after starting the containers.
 
 ### Usage
 
@@ -231,11 +231,11 @@ You can also visit `https://${DOMAIN_NAME}:9001` to access portainer after start
 #### Here’s a quick reference of commonly used Docker Compose commands
 
 ```
-docker ps -a	# Lists all containers managed by the compose file
+docker ps -a # Lists all containers managed by the compose file
 ```
 
 ```
-docker compose start	# Starts previously stopped containers
+docker compose start # Starts previously stopped containers
 ```
 
 ```
@@ -259,7 +259,7 @@ docker volume rm $(docker volume ls -q)	# Removes all volumes
 ```
 
 ```
-docker network prune	# Remove all unused networks
+docker network prune # Remove all unused networks
 ```
 
 ```
@@ -267,15 +267,15 @@ docker system prune	# Removes unused data (containers, networks, images, and opt
 ```
 
 ```
-docker system prune -a	# Removes all unused images, not just dangling ones
+docker system prune -a # Removes all unused images, not just dangling ones
 ```
 
 ```
-docker rmi $(docker image ls -q)	# Removes portainer and the other images
+docker rmi $(docker image ls -q) # Removes portainer and the other images
 ```
 
 ```
-docker container logs container_name_or_id	# Shows logs from all services
+docker container logs container_name_or_id # Shows logs from all services
 ```
 
 #### Project from existing source
@@ -300,27 +300,27 @@ Send Email Node;
 
 SMTP account: ```Host: mail; Port: 1025; SSL/TLS: off;```
 
-The authorize screen: |```user: ${DB_USER}```| and |```password: ${DB_PASSWORD}```| in the `.env` file.
+The authorize screen: |```user: DB_USER```| and |```password: DB_PASSWORD```| in the `.env` file.
 
 #### Database
 
-Postgres account; |```Host: database; Port: 5432; Database: ${DB_NAME}; User: ${DB_USER}; Password: ${DB_PASSWORD}```| in the `.env` file.
+Postgres account; |```Host: database; Port: 5432; Database: DB_NAME; User: DB_USER; Password: DB_PASSWORD```| in the `.env` file.
 
 #### Datavector
 
-Postgres vector account; |```Host: datavector; Port: 15432; Database: ${DB_NAME}; User: ${DB_USER}; Password: ${DB_PASSWORD}```| in the `.env` file.
+Postgres vector account; |```Host: datavector; Port: 15432; Database: DB_NAME; User: DB_USER; Password: DB_PASSWORD```| in the `.env` file.
 
 #### pgAdmin
 
-You can also visit `https://${DOMAIN_NAME}:9090`.
+You can also visit `https://DOMAIN_NAME:9090`.
 
-The login screen, |```username: ${LETSENCRYPT_EMAIL}``` and ```password: ${PGA_CONTROLPASS}```| in the `.env` file.
+The login screen, |```username: LETSENCRYPT_EMAIL``` and ```password: PGA_CONTROLPASS```| in the `.env` file.
 
 You don't see the login page in your browser;\
 pgAdmin runs as the pgadmin user (UID: 5050) in the pgadmin group (GID: 5050) in the container.
 You must ensure that all files are readable, and where necessary (e.g. the working/session directory) writeable for this user on the host machine.
 
-```sudo chown -R 5050:5050 ./pgadmin``` and/or ```sudo chown -R 5050:5050 ./certbot/live/${DOMAIN_NAME}```
+```sudo chown -R 5050:5050 ./pgadmin``` and/or ```sudo chown -R 5050:5050 ./certbot/live/DOMAIN_NAME```
 
 #### Ollama
 
@@ -331,7 +331,7 @@ More models can be found on the [https://ollama.com/library](https://ollama.com/
 
 #### Open WEBUI
 
-You can also visit `https://${WEBUI_SUBDOMAIN}.${DOMAIN_NAME}`.
+You can also visit `https://WEBUI_SUBDOMAIN.DOMAIN_NAME`.
 
 [Environment Variable Configuration](https://docs.openwebui.com/getting-started/env-configuration)
 
@@ -349,11 +349,11 @@ Configuration; |```Host: redis```|
 
 #### WhatsApp
 
-API URL; |```https://${WHATSAPP_SUBDOMAIN}.${DOMAIN_NAME}```| and API Key; |```${WHATSAPP_API_KEY}```| in the `.env` file.
+API URL; |```https://WHATSAPP_SUBDOMAIN.DOMAIN_NAME```| and API Key; |```WHATSAPP_API_KEY```| in the `.env` file.
 
-You can also visit `https://${WHATSAPP_SUBDOMAIN}.${DOMAIN_NAME}/dashboard` and swagger page - `https://${WHATSAPP_SUBDOMAIN}.${DOMAIN_NAME}`.
+You can also visit `https://WHATSAPP_SUBDOMAIN.DOMAIN_NAME/dashboard` and swagger page - `https://WHATSAPP_SUBDOMAIN.DOMAIN_NAME`.
 
-The authorize screen: |```Username: ${DB_USER}```| and |```Password: ${DB_PASSWORD}```| in the `.env` file.
+The authorize screen: |```Username: DB_USER```| and |```Password: DB_PASSWORD```| in the `.env` file.
 
 [n8n Integration](https://waha.devlike.pro/docs/integrations/n8n/)
 
@@ -365,7 +365,7 @@ The authorize screen: |```Username: ${DB_USER}```| and |```Password: ${DB_PASSWO
 
 #### Pipelines
 
-Open WEBUI Manage Configurations `https://${WEBUI_SUBDOMAIN}.${DOMAIN_NAME}`:
+Open WEBUI Manage Configurations `https://WEBUI_SUBDOMAIN.DOMAIN_NAME`:
 
 Go to **Admin Panel >> Settings -> Pipelines**.
 
