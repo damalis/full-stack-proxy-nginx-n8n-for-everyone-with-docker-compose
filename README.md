@@ -333,7 +333,7 @@ More models can be found on the [https://ollama.com/library](https://ollama.com/
 
 You can also visit `https://WEBUI_SUBDOMAIN.DOMAIN_NAME`.
 
-[Environment Variable Configuration](https://docs.openwebui.com/getting-started/env-configuration)
+[Environment Variable Configuration](https://docs.openwebui.com/reference/env-configuration)
 
 #### Proxy
 
