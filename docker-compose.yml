@@ -267,9 +267,9 @@ services:
         #command: "redis-server ${REDIS_CONF_PREFIX}/redis/redis.conf"
 
     whatsapp:
-        depends_on:
-            certbot:
-                condition: service_healthy
+        #depends_on:
+        #    certbot:
+        #        condition: service_healthy
         image: devlikeapro/waha:latest
         container_name: whatsapp
         networks:
