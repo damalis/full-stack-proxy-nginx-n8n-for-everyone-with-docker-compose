@@ -54,6 +54,7 @@ Plus, manage docker containers with Portainer.
 [![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-red?logo=raspberrypi)](https://www.raspberrypi.com/)
 
 ##### Note: Fedora 37, 39 and alpine linux x86-64 compatible, could not try sles IBM Z s390x, rhel IBM Z s390x and raspberrypi.
+##### After installing the repository, a system reboot is required on Red Hat OS, Arch Linux.
 
 ##### System Requirements
 
@@ -67,7 +68,7 @@ Plus, manage docker containers with Portainer.
 #### With this project you can quickly run the following:
 
 - [n8n](https://hub.docker.com/r/n8nio/n8n)
-- [mailhog](https://github.com/mailhog)
+- [MailHog](https://github.com/mailhog)
 - [postgreSQL](https://hub.docker.com/_/postgres)
 - [pgvector](https://hub.docker.com/r/pgvector/pgvector)
 - [pgAdmin](https://hub.docker.com/r/dpage/pgadmin4)
